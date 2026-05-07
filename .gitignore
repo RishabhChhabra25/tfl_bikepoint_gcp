@@ -1,0 +1,11 @@
+venv/
+.env
+*.json
+__pycache__/
+*.pyc
+
+target/
+dbt_packages/
+logs/
+
+.DS_Store
