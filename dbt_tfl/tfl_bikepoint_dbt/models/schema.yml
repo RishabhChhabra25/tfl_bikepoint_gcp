@@ -1,0 +1,12 @@
+version: 2
+
+sources:
+  - name: tfl_raw
+    database: "{{ target.project }}"
+    schema: tfl_raw
+    tables:
+      - name: snapshots
+
+models:
+  - name: tfl_flatten
+    description: "Flattened BikePoint station snapshot records derived from tfl_raw.snapshots."
