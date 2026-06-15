@@ -6,7 +6,31 @@ sources:
     schema: tfl_raw
     tables:
       - name: snapshots
+        description: "Raw TFL Bikepoint snapshots loaded by python ingestion"
+        columns:
+          - name: snapshot_ts
+            description: "Timestamp when the API snapshot was captured."
+            tests:
+              - not_null
+          - name: gcs_url
+            description: "GCS path of raw JSON"
+            tests:
+              - not_null
+          - name: payload
+            description: "Full tfl bikepoint API resposne stored as JSON text."
+            tests:
+              - not_null
+
 
 models:
   - name: tfl_flatten
     description: "Flattened BikePoint station snapshot records derived from tfl_raw.snapshots."
+
+  - name: tfl_current
+    description: "Latest Bikepoint Station availability, with one row per station based on the most recent snapshot."
+
+  - name: tfl_kpis
+    description: KPIs needed for the dashboard 
+
+  - name: tfl_trend
+    description: hourly trend of bike and dock availability
