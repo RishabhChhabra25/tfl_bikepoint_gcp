@@ -51,19 +51,24 @@ def upload_metadata(dataset: str, table: str, snapshot_ts: str, gcs_url: str, pa
         raise RuntimeError(f"BigQuery insert errors: {errors}")
 
 
-data, status = fetch_data()
-logging.info("HTTP Status: %s", status)
-logging.info("Stations fetched: %s", len(data))
+def main():
+    data, status = fetch_data()
+    logging.info("HTTP Status: %s", status)
+    logging.info("Stations fetched: %s", len(data))
 
-now = datetime.now(timezone.utc)
-ts = now.strftime("%Y%m%dT%H%M%SZ")
-ts_bq = now.isoformat()
+    now = datetime.now(timezone.utc)
+    ts = now.strftime("%Y%m%dT%H%M%SZ")
+    ts_bq = now.isoformat()
 
-bucket = 'tfl_bucket01_raw01'
-object_name = f"raw/bikepoint_snapshot_{ts}.json"
+    bucket = os.getenv("GCS_BUCKET", "tfl_bucket01_raw01")
+    object_name = f"raw/bikepoint_snapshot_{ts}.json"
 
-gcs_uri = upload_to_gcs(bucket, object_name, data)
-logging.info("Uploaded: %s", gcs_uri)
+    gcs_uri = upload_to_gcs(bucket, object_name, data)
+    logging.info("Uploaded: %s", gcs_uri)
 
-upload_metadata("tfl_raw", "snapshots", ts_bq, gcs_uri, data)
-logging.info("Metadata inserted into BigQuery")
+    upload_metadata("tfl_raw", "snapshots", ts_bq, gcs_uri, data)
+    logging.info("Metadata inserted into BigQuery")
+
+
+if __name__ == "__main__":
+    main()
