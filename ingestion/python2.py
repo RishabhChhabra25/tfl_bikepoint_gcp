@@ -60,7 +60,7 @@ def main():
     ts = now.strftime("%Y%m%dT%H%M%SZ")
     ts_bq = now.isoformat()
 
-    bucket = os.getenv("GCS_BUCKET", "tfl_bucket01_raw01")
+    bucket = os.getenv("GCS_BUCKET", "tfl_bucket01_raw")
     object_name = f"raw/bikepoint_snapshot_{ts}.json"
 
     gcs_uri = upload_to_gcs(bucket, object_name, data)
